@@ -133,7 +133,7 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
   describe '#initialize' do
     it 'raises an error when the given URI refers to a non registered database adapter' do
       -> {
-        Hanami::Model::Adapters::SqlAdapter.new(@mapper, 'oracle://host')
+        Hanami::Model::Adapters::RethinkDBAdapter.new(@mapper, 'oracle://host')
       }.must_raise(Hanami::Model::Adapters::DatabaseAdapterNotFound)
     end
 
