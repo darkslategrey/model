@@ -1,5 +1,6 @@
 require 'delegate'
 require 'hanami/utils/kernel' unless RUBY_VERSION >= '2.1'
+require 'hanami/utils/hash'
 
 module Hanami
   module Model
@@ -45,7 +46,6 @@ module Hanami
           def insert(entity)
             serialized_entity           = _serialize(entity)
             serialized_entity[identity] = super(serialized_entity).run(@connection)
-            binding.pry
             _deserialize(serialized_entity)
           end
 
@@ -198,8 +198,12 @@ module Hanami
           #
           # @api private
           # @since 0.1.0
+
           def to_a
-            @mapped_collection.deserialize(self)
+            entities = self.run(@connection).to_a.map { |entity|
+              Hanami::Utils::Hash.new(entity).symbolize!
+            }
+            @mapped_collection.deserialize(entities)
           end
 
           # Select all attributes for current scope
@@ -269,7 +273,6 @@ module Hanami
           # @api private
           # @since 0.2.2
           def _deserialize(entity)
-            puts "deserialize  DEBUG <#{entity}>"
             @mapped_collection.deserialize([entity]).first
           end
         end

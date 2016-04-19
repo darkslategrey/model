@@ -2,6 +2,7 @@
 require 'hanami/model/adapters/abstract'
 require 'hanami/model/adapters/implementation'
 require 'hanami/model/adapters/rethinkdb/collection'
+require 'hanami/model/adapters/rethinkdb/coercer'
 require 'hanami/model/adapters/rethinkdb/command'
 require 'hanami/model/adapters/rethinkdb/query'
 require 'pry'
@@ -107,7 +108,7 @@ module Hanami
         # @api private
         # @since 0.1.0
         def query(collection, context = nil, &blk)
-          RethinkDB::Query.new(_collection(collection), context, &blk)
+          RethinkDB::Query.new(_collection(collection), @connection, context, &blk)
         end
 
         # Wraps the given block in a transaction.

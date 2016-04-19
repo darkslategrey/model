@@ -41,8 +41,8 @@ module Hanami
           #   context of the current query
           #
           # @return [Hanami::Model::Adapters::RethinkDB::Query]
-          def initialize(collection, context = nil, &blk)
-            @collection, @context = collection, context
+          def initialize(collection, connection, context = nil, &blk)
+            @collection, @connection, @context = collection, connection, context
             @conditions = []
 
             instance_eval(&blk) if block_given?
@@ -593,7 +593,7 @@ module Hanami
             conditions.each do |(method,*args)|
               scope = scope.public_send(method, *args)
             end
-
+            
             scope
           end
 

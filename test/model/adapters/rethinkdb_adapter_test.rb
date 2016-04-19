@@ -56,7 +56,7 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
       collection :users do
         entity TestUser
 
-        attribute :id,   Integer
+        attribute :id,   RethinkDBId
         attribute :country_id, Integer
         attribute :name, String
         attribute :age,  Integer
@@ -65,14 +65,14 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
       collection :devices do
         entity TestDevice
 
-        attribute :id, Integer
+        attribute :id, RethinkDBId
         attribute :u_id, Integer
       end
 
       collection :orders do
         entity TestOrder
 
-        attribute :id,      Integer
+        attribute :id,      RethinkDBId
         attribute :user_id, Integer
         attribute :total,   Integer
       end
@@ -80,7 +80,7 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
       collection :ages do
         entity TestAge
 
-        attribute :id,    Integer
+        attribute :id,    RethinkDBId
         attribute :value, Integer
         attribute :label, String
       end
@@ -89,7 +89,7 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
         entity TestCountry
 
         identity :country_id
-        attribute :id,   Integer, as: :country_id
+        attribute :id,   RethinkDBId, as: :country_id
         attribute :code, String
       end
     end.load!
