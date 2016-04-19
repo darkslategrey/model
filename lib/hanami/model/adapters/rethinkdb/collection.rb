@@ -14,8 +14,6 @@ module Hanami
 
             @mapped_collection = mapped_collection
             @connection        = connection
-
-            puts "mapped_collection DEBUG <#{@mapped_collection}>"
           end
 
           # Filters the current scope with an `exclude` directive.
@@ -260,10 +258,7 @@ module Hanami
           # @api private
           # @since 0.1.0
           def _serialize(entity)
-            puts "serialize  DEBUG <#{entity}>"
-            serialized = @mapped_collection.serialize(entity)
-            puts "serialized <#{serialized}>"
-            serialized
+            @mapped_collection.serialize(entity)
           end
 
           # Deserialize the given entity after it was persisted in the database.

@@ -89,8 +89,6 @@ module Hanami
         end
 
         def _mapped_collection(name)
-          puts "_mapped_collection name <#{name}>"
-          puts "@mapper <#{@mapper.collection(name)}>"
           @mapper.collection(name)
         end
 
