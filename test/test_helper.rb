@@ -1,3 +1,4 @@
+$VERBOSE = nil
 require 'rubygems'
 require 'bundler/setup'
 
@@ -23,6 +24,7 @@ require 'hanami-model'
 require 'hanami/model/adapters/memory_adapter'
 require 'hanami/model/adapters/file_system_adapter'
 require 'hanami/model/adapters/sql_adapter'
+require 'hanami/model/adapters/rethinkdb_adapter'
 
 db = Pathname.new(__dir__).join('../tmp/db')
 db.dirname.mkpath        # create directory if not exist
@@ -46,8 +48,10 @@ if Hanami::Utils.jruby?
 else
   require 'sqlite3'
   require 'pg'
-  SQLITE_CONNECTION_STRING   = "sqlite://#{ sql }"
-  POSTGRES_CONNECTION_STRING = "postgres://localhost/#{ postgres_database }"
+  SQLITE_CONNECTION_STRING    = "sqlite://#{ sql }"
+  POSTGRES_CONNECTION_STRING  = "postgres://greg@localhost/#{ postgres_database }"
+  RETHINKDB_CONNECTION_STRING = "rethinkdb://localhost:28015/test_adapter"
+  # postgresql://[user[:password]@][netloc][:port][/dbname][?param1=value1&...]
 end
 
 MEMORY_CONNECTION_STRING      = "memory://test"

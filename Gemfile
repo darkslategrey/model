@@ -14,6 +14,9 @@ platforms :ruby do
   gem 'pg'
   gem 'mysql2'
   gem 'mysql'
+  gem 'nobrainer'
+  gem 'pry'
+  gem 'pry-byebug'
 end
 
 platforms :jruby do

@@ -88,6 +88,25 @@ class RobotRepository
   include Hanami::Repository
 end
 
+
+## rethinkdb
+uri            = URI.parse(RETHINKDB_CONNECTION_STRING)
+host, port, db = [uri.host, uri.port, uri.path.gsub('/', '')]
+
+require 'rethinkdb'
+include RethinkDB::Shortcuts
+connection = r.connect(host: host, port: port, db: db)
+
+r.db_list.run(connection).each do |d|
+  d.to_s == db and r.db_drop(db).run(connection)
+end
+
+r.db_create(db).run(connection)
+[:users, :devices, :orders, :ages, :countries].each do |table_name|
+  r.table_create(table_name).run(connection)
+end
+
+
 [SQLITE_CONNECTION_STRING, POSTGRES_CONNECTION_STRING].each do |conn_string|
   require 'hanami/utils/io'
 
