@@ -139,13 +139,13 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
 
     it 'raises an error when the given URI refers to an unknown database adapter' do
       -> {
-        Hanami::Model::Adapters::SqlAdapter.new(@mapper, 'unknown://host')
+        Hanami::Model::Adapters::RethinkDBAdapter.new(@mapper, 'unknown://host')
       }.must_raise(Hanami::Model::Adapters::DatabaseAdapterNotFound)
     end
 
     it 'raises an error when the given URI is malformed' do
       -> {
-        Hanami::Model::Adapters::SqlAdapter.new(@mapper, 'unknown_db:host')
+        Hanami::Model::Adapters::RethinkDBAdapter.new(@mapper, 'unknown_db:host')
       }.must_raise(URI::InvalidURIError)
     end
 

@@ -22,6 +22,8 @@ module Hanami
           host, port, db = [@uri.host, @uri.port, @uri.path.gsub('/', '')]
 
           @connection = r.connect(host: host, port: port, db: db)
+        rescue URI::InvalidURIError => e
+          raise e
         rescue Exception => e
           raise DatabaseAdapterNotFound.new(e.message)
         end
