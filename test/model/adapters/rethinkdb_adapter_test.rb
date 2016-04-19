@@ -153,11 +153,11 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
       spy = nil
       after_connect_spy_proc = Proc.new { spy = true }
 
-      adapter = Hanami::Model::Adapters::SqlAdapter.new(@mapper,
-                                                        SQLITE_CONNECTION_STRING, after_connect: after_connect_spy_proc)
+      adapter = Hanami::Model::Adapters::RethinkDBAdapter.new(@mapper,
+                                                              RETHINKDB_CONNECTION_STRING,
+                                                              after_connect: after_connect_spy_proc)
 
-      # Sequel lazily connects
-      adapter.execute('select 1 as dummy')
+      adapter.all(:users)
 
       spy.must_equal true
     end

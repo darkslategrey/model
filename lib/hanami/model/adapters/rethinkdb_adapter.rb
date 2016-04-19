@@ -19,9 +19,10 @@ module Hanami
         def initialize(mapper, uri, options = {})
           super
           @uri            = URI.parse(@uri)
-          host, port, db = [@uri.host, @uri.port, @uri.path.gsub('/', '')]
+          host, port, db  = [@uri.host, @uri.port, @uri.path.gsub('/', '')]
 
           @connection = r.connect(host: host, port: port, db: db)
+          options[:after_connect].call if options[:after_connect]
         rescue URI::InvalidURIError => e
           raise e
         rescue Exception => e
