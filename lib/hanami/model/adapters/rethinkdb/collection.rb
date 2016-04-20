@@ -59,7 +59,7 @@ module Hanami
           # @api private
           # @since 0.1.0
           def limit(*args)
-            Collection.new(super, @mapped_collection)
+            Collection.new(super, @mapped_collection, @connection)
           end
 
           # Filters the current scope with an `offset` directive.
@@ -157,6 +157,10 @@ module Hanami
           # @since 0.5.0
           def group(*args)
             Collection.new(super, @mapped_collection)
+          end
+
+          def filter(*args)
+            Collection.new(super, @mapped_collection, @connection)
           end
 
           # Filters the current scope with a `where` directive.

@@ -59,7 +59,7 @@ module Hanami
           # @since 0.1.0
           def all
             run.to_a
-          rescue Sequel::DatabaseError => e
+          rescue Exception => e
             raise Hanami::Model::InvalidQueryError.new(e.message)
           end
 
@@ -589,11 +589,13 @@ module Hanami
           # @since 0.1.0
           def scoped
             scope = @collection
-
             conditions.each do |(method,*args)|
-              scope = scope.public_send(method, *args)
+              if method == :where
+                scope = scope.public_send(:filter, *args)
+              else
+                scope = scope.public_send(method, *args)
+              end
             end
-            
             scope
           end
 

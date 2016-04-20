@@ -5,6 +5,8 @@ require 'hanami/model/adapters/rethinkdb/collection'
 require 'hanami/model/adapters/rethinkdb/coercer'
 require 'hanami/model/adapters/rethinkdb/command'
 require 'hanami/model/adapters/rethinkdb/query'
+require 'hanami/logger'
+
 require 'pry'
 
 require 'rethinkdb'
@@ -18,7 +20,9 @@ module Hanami
 
         def initialize(mapper, uri, options = {})
           super
-          @uri            = URI.parse(@uri)
+          @uri = URI.parse(uri)
+          raise DatabaseAdapterNotFound if @uri.scheme != 'rethinkdb' 
+
           host, port, db  = [@uri.host, @uri.port, @uri.path.gsub('/', '')]
 
           @connection = r.connect(host: host, port: port, db: db)
@@ -251,7 +255,7 @@ module Hanami
         #
         # @see Hanami::Model::Adapters::Abstract#disconnect
         def disconnect
-          @connection.disconnect
+          @connection.close
           @connection = DisconnectedResource.new
         end
 
