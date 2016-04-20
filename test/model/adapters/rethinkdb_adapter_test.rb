@@ -348,7 +348,6 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
     let(:entity) { TestUser.new }
 
     it 'removes all the records' do
-      skip
       @adapter.clear(collection)
       @adapter.all(collection).must_be_empty
     end
@@ -366,7 +365,6 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
     describe 'where' do
       describe 'with an empty collection' do
         it 'returns an empty result set' do
-          skip
           result = @adapter.query(collection) do
             where(id: 23)
           end.all
@@ -382,7 +380,6 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
         end
 
         it 'returns selected records' do
-          skip
           id = @user1.id
 
           query = Proc.new {
@@ -394,7 +391,6 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
         end
 
         it 'can use multiple where conditions' do
-          skip
           id   = @user1.id
           name = @user1.name
 
@@ -407,7 +403,6 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
         end
 
         it 'can use multiple where conditions with "and" alias' do
-          skip
           id   = @user1.id
           name = @user1.name
 
@@ -420,9 +415,10 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
         end
 
         it 'can use lambda to describe where conditions' do
-          skip
           query = Proc.new {
-            where{ age > 31 }
+            where{ |entity|
+              entity["age"] > 31
+            }
           }
 
           result = @adapter.query(collection, &query).all
@@ -430,8 +426,6 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
         end
 
         it 'raises InvalidQueryError if you use wrong column names' do
-          skip
-          skip
           exception = -> {
             query = Proc.new { where { a > 31 } }
             @adapter.query(collection, &query).all
@@ -441,7 +435,6 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
         end
 
         it 'raises an error if you dont specify condition or block' do
-          skip
           -> {
             query = Proc.new {
               where()
@@ -455,7 +448,6 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
     describe 'exclude' do
       describe 'with an empty collection' do
         it 'returns an empty result set' do
-          skip
           result = @adapter.query(collection) do
             exclude(id: 23)
           end.all
@@ -474,19 +466,19 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
         let(:user3) { TestUser.new(name: 'S', age: 2) }
 
         it 'returns selected records' do
-          skip
           id = @user1.id
-
           query = Proc.new {
-            exclude(id: id)
+            exclude(name: 'L')
           }
 
           result = @adapter.query(collection, &query).all
-          result.must_equal [@user2, @user3]
+
+          -> {
+            Set.new(result.map(&:name)) == Set.new([@user2.name, @user3.name])
+          }.call.must_equal true
         end
 
         it 'can use multiple exclude conditions' do
-          skip
           id   = @user1.id
           name = @user2.name
 
@@ -499,7 +491,6 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
         end
 
         it 'can use multiple exclude conditions with "not" alias' do
-          skip
           id   = @user1.id
           name = @user2.name
 
@@ -512,7 +503,6 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
         end
 
         it 'raises InvalidQueryError if you use wrong column names' do
-          skip
           exception = -> {
             query = Proc.new { exclude{ a > 32 } }
             @adapter.query(collection, &query).all
@@ -532,7 +522,6 @@ describe Hanami::Model::Adapters::RethinkDBAdapter do
         end
 
         it 'raises an error if you dont specify condition or block' do
-          skip
           -> {
             query = Proc.new {
               exclude()

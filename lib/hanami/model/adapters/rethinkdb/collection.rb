@@ -28,7 +28,16 @@ module Hanami
           # @api private
           # @since 0.1.0
           def exclude(*args)
-            Collection.new(super, @mapped_collection)
+            filters = "Proc.new { |e| "
+            args[0].each_pair do |attr, value|
+              filters += "e['#{attr}'].ne('#{value}');"
+            end
+            filters += "}"
+
+            filter(eval(filters))
+          end
+
+          def negate!(*args)
           end
 
           # Creates a record for the given entity and assigns an id.
@@ -163,20 +172,7 @@ module Hanami
             Collection.new(super, @mapped_collection, @connection)
           end
 
-          # Filters the current scope with a `where` directive.
-          #
-          # @param args [Array] the array of arguments
-          #
-          # @see Hanami::Model::Adapters::RethinkDB::Query#where
-          #
-          # @return [Hanami::Model::Adapters::RethinkDB::Collection] the filtered
-          #   collection
-          #
-          # @api private
-          # @since 0.1.0
-          def where(*args)
-            Collection.new(super, @mapped_collection)
-          end
+          alias_method :where, :filter
 
           # Updates the record corresponding to the given entity.
           #

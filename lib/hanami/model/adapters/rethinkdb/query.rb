@@ -41,7 +41,7 @@ module Hanami
           #   context of the current query
           #
           # @return [Hanami::Model::Adapters::RethinkDB::Query]
-          def initialize(collection, connection, context = nil, &blk)
+          def initialize(collection, connection = nil, context = nil, &blk)
             @collection, @connection, @context = collection, connection, context
             @conditions = []
 
@@ -590,7 +590,8 @@ module Hanami
           def scoped
             scope = @collection
             conditions.each do |(method,*args)|
-              if method == :where
+              case method
+              when :where
                 scope = scope.public_send(:filter, *args)
               else
                 scope = scope.public_send(method, *args)
