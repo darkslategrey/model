@@ -359,7 +359,7 @@ module Hanami
           #   # => SELECT * FROM `people` ORDER BY `name`, `year` DESC
           def reverse_order(*columns)
             Array(columns).each do |column|
-              conditions.push([_order_operator, Sequel.desc(column)])
+              conditions.push([_order_operator, r.desc(column)])
             end
 
             self
@@ -763,7 +763,7 @@ module Hanami
             if conditions.any? {|c, _| c == :order }
               :order_more
             else
-              :order
+              :order_by
             end
           end
         end

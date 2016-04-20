@@ -54,7 +54,9 @@ module Hanami
           # @api private
           # @since 0.1.0
           def update(entity)
-            _handle_database_error { @collection.update(entity) }
+            _handle_database_error {
+              @collection.update(entity)
+            }
           end
 
           # Deletes all the records for the current query.

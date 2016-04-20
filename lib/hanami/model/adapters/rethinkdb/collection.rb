@@ -103,8 +103,8 @@ module Hanami
           #
           # @api private
           # @since 0.1.0
-          def order(*args)
-            Collection.new(super, @mapped_collection)
+          def order_by(*args)
+            Collection.new(super, @mapped_collection, @connection)
           end
 
           # Filters the current scope with an `order` directive.
@@ -188,7 +188,7 @@ module Hanami
           # @since 0.1.0
           def update(entity)
             serialized_entity = _serialize(entity)
-            super(serialized_entity)
+            super(serialized_entity).run(@connection)
 
             _deserialize(serialized_entity)
           end
